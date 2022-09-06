@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
 const crypto = require('crypto');
 
 Object.defineProperty(global, 'crypto', {
@@ -58,5 +59,15 @@ module.exports = {
       .catch(reject)
       .finally(terminate);
     });
-  }
-}
+  },
+
+  inspectFile: (filename, annotations_only=false) => {
+    return module.exports.inspect(filename, fs.readFileSync(filename).toString(), annotations_only)
+  },
+
+  inspectFiles: (globPattern, annotations_only=false) => {
+    const inspectAll = glob.sync(globPattern).map(f => module.exports.inspectFile(f, annotations_only))
+    return Promise.all(inspectAll).then(a => a.flat())
+  },
+
+ }

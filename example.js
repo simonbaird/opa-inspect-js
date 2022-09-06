@@ -18,3 +18,11 @@ msg := "nope"
 }`).then(json => {
   console.log(JSON.stringify(json));
 });
+
+opa.inspectFile("__test__/example.rego").then(json => {
+  console.log(JSON.stringify(json));
+});
+
+opa.inspectFiles("**/*.rego").then(json => {
+  console.log(JSON.stringify(json));
+});
